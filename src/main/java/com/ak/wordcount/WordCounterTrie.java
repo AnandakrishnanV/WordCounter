@@ -7,14 +7,12 @@ import java.util.concurrent.ForkJoinPool;
 
 import com.ak.wordcount.interfaces.Translator;
 import com.ak.wordcount.models.TrieNode;
-import com.ak.wordcount.util.CheckWordValidity;
+import com.ak.wordcount.util.TextProcessingUtil;
 
 public class WordCounterTrie {
 
 	private final Translator translator;
 	private final TrieNode root;
-	
-	private final int batchSize = 10000; // Must be tuned depending on usecase
 
 	public WordCounterTrie(Translator translator) {
 		this.translator = translator;
@@ -27,20 +25,18 @@ public class WordCounterTrie {
 		ForkJoinPool customPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());
 
 		try {
-			customPool.submit(() ->
-            words.parallelStream().forEach(word -> {
-                try {
-                    if (!CheckWordValidity.check(word)) {
-                        throw new IllegalArgumentException("Word contains non-alphabetic characters: " + word);
-                    }
-                    String translatedWord = translator.translate(word);
-                    insertWord(translatedWord);
-                } catch (IllegalArgumentException e) {
-                    // Log the exception and continue with other words
-                    System.err.println(e.getMessage());
-                }
-            })
-        ).get(); // Blocks until all tasks are completed
+			customPool.submit(() -> words.parallelStream().forEach(word -> {
+				try {
+					if (!TextProcessingUtil.checkWordValidity(word)) {
+						throw new IllegalArgumentException("Word contains non-alphabetic characters: " + word);
+					}
+					String translatedWord = translator.translate(word);
+					insertWord(translatedWord);
+				} catch (IllegalArgumentException e) {
+					// Log the exception and continue with other words
+					System.err.println(e.getMessage());
+				}
+			})).get(); // Blocks until all tasks are completed
 		} catch (InterruptedException | ExecutionException e) {
 			Thread.currentThread().interrupt();
 			throw new RuntimeException("Error processing words in parallel", e);
@@ -50,30 +46,30 @@ public class WordCounterTrie {
 	}
 
 	private void insertWord(String word) {
-        TrieNode current = root;
-        for (char ch : word.toCharArray()) {
-            current = current.children.computeIfAbsent(ch, c -> new TrieNode());
-        }
-        current.endOfWordCount.incrementAndGet();
-    }
+		TrieNode current = root;
+		for (char ch : word.toCharArray()) {
+			current = current.children.computeIfAbsent(ch, c -> new TrieNode());
+		}
+		current.endOfWordCount.incrementAndGet();
+	}
 
-    public int getWordCount(String word) {			
-    	
-    	if (!CheckWordValidity.check(word)) {
-            return 0;
-        }
-    	
-        TrieNode current = root;
-        String translatedWord = translator.translate(word.toLowerCase());
+	public int getWordCount(String word) {
 
-        for (char ch : translatedWord.toCharArray()) {
-            current = current.children.get(ch);
-            if (current == null) {
-                return 0;
-            }
-        }
+		if (!TextProcessingUtil.checkWordValidity(word)) {
+			return 0;
+		}
 
-        return current.endOfWordCount.get();
-    }
+		TrieNode current = root;
+		String translatedWord = translator.translate(word.toLowerCase());
+
+		for (char ch : translatedWord.toCharArray()) {
+			current = current.children.get(ch);
+			if (current == null) {
+				return 0;
+			}
+		}
+
+		return current.endOfWordCount.get();
+	}
 
 }
