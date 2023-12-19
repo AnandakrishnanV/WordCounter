@@ -18,17 +18,34 @@ import com.ak.wordcount.interfaces.Translator;
 
 @ExtendWith(MockitoExtension.class)
 public class WordCounterTests {
-	
+
 	private WordCounter wordCounter;
 
-	 @Mock
-	 private Translator translator;
-	 
-	 @BeforeEach
-	    public void setUp() {
-	        wordCounter = new WordCounter(translator);
-	    }
-	
+	@Mock
+	private Translator translator;
+
+	@BeforeEach
+	public void setUp() {
+//		setUpTranslatorMock();
+		wordCounter = new WordCounter(translator);
+	}
+
+	// This would be more readable and The overhead is negligible as we only have
+	// few mock translations. If mocking large sets, better to separate based on the
+	// tests
+	// But have to use lenient() to bypass strict stub error, so leaving it as is.
+
+//	private void setUpTranslatorMock() {
+//		 when(translator.translate("flower")).thenReturn("flower");
+//		 when(translator.translate("tree")).thenReturn("tree");
+//		 when(translator.translate("sunflower")).thenReturn("sunflower");
+//		 when(translator.translate("daisy")).thenReturn("daisy");
+//		 when(translator.translate("rose")).thenReturn("rose");
+//		 when(translator.translate("flor")).thenReturn("flower");
+//		 when(translator.translate("orchid")).thenReturn("orchid");
+//		 when(translator.translate("blume")).thenReturn("flower");
+//	 }
+
 	@Test
     public void testAddValidWord() {
 		when(translator.translate("flower")).thenReturn("flower");
@@ -36,7 +53,7 @@ public class WordCounterTests {
         wordCounter.addWord("flower");
         assertEquals(1, wordCounter.getWordCount("flower"));
     }
-	
+
 	@Test
 	public void testAddMultipleWords() {
 		when(translator.translate("flower")).thenReturn("flower");
@@ -46,7 +63,7 @@ public class WordCounterTests {
         assertEquals(1, wordCounter.getWordCount("flower"));
         assertEquals(1, wordCounter.getWordCount("sunflower"));
 	}
-	
+
 	@Test
     public void testAddWordWithNonAlphabeticCharacters() {
 		when(translator.translate("flower")).thenReturn("flower");
@@ -59,7 +76,7 @@ public class WordCounterTests {
         // Since "flower123" is invalid, it should not be added, and its count should be 0
         assertEquals(0, wordCounter.getWordCount("flower123"));
     }
-	
+
 	@Test
     public void testTranslationAndAddition() {
         when(translator.translate("flor")).thenReturn("flower");
@@ -70,14 +87,14 @@ public class WordCounterTests {
         assertEquals(2, wordCounter.getWordCount("flower"));
     }
 
-    @Test
+	@Test
     public void testGetCountOfNonExistingWord() {
     	when(translator.translate("rose")).thenReturn("rose");
     	
         assertEquals(0, wordCounter.getWordCount("rose"));
     }
-    
-    @Test
+
+	@Test
     public void testConcurrentWordAddition() {
     	when(translator.translate("flower")).thenReturn("flower");
     	
@@ -85,36 +102,34 @@ public class WordCounterTests {
                                .mapToObj(i -> "flower")
                                .collect(Collectors.joining(" "));
 
-        // Simulating concurrent access by adding the same text in multiple threads
-        IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWord(text));
-
+        // Simulating concurrent access by adding the same text using multiple threads
         // Each "flower" in the text is added 10,000 times in 10 different threads
+        IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWord(text));
         assertEquals(100000, wordCounter.getWordCount("flower"));
     }
-    
-    @Test
-    public void testLargeDataProcessing() {
-    	when(translator.translate("flower")).thenReturn("flower");
-        when(translator.translate("tree")).thenReturn("tree");
-        when(translator.translate("sunflower")).thenReturn("sunflower");
-        when(translator.translate("daisy")).thenReturn("daisy");
-        when(translator.translate("rose")).thenReturn("rose");
-        when(translator.translate("flor")).thenReturn("flower");
-        when(translator.translate("orchid")).thenReturn("orchid");
-        when(translator.translate("blume")).thenReturn("flower");
-    	
-    	
-        String largeText = TestDataGenerator.generateLargeTextSet(10000); // Generate a large text with 100,000 words
-        wordCounter.addWord(largeText);
 
-        int expectedFlowerCount = countFlowerOccurrences(largeText, "flower");
-        assertEquals(expectedFlowerCount, wordCounter.getWordCount("flower"));
-        
-        int expectedWordCount = countOccurrences(largeText, "tree");
-        assertEquals(expectedWordCount, wordCounter.getWordCount("tree"));
-    }
-    
-    @Test
+	@Test
+	public void testLargeDataProcessing() {
+		when(translator.translate("flower")).thenReturn("flower");
+		when(translator.translate("tree")).thenReturn("tree");
+		when(translator.translate("sunflower")).thenReturn("sunflower");
+		when(translator.translate("daisy")).thenReturn("daisy");
+		when(translator.translate("rose")).thenReturn("rose");
+		when(translator.translate("flor")).thenReturn("flower");
+		when(translator.translate("orchid")).thenReturn("orchid");
+		when(translator.translate("blume")).thenReturn("flower");
+
+		String largeText = TestDataGenerator.generateLargeTextSet(100000); // Generate a large text with 100,000 words
+		wordCounter.addWord(largeText);
+
+		int expectedFlowerCount = countFlowerOccurrences(largeText, "flower");
+		assertEquals(expectedFlowerCount, wordCounter.getWordCount("flower"));
+
+		int expectedWordCount = countOccurrences(largeText, "tree");
+		assertEquals(expectedWordCount, wordCounter.getWordCount("tree"));
+	}
+
+	@Test
     public void testLargeDataWithInvalidWordsProcessing() {
     	when(translator.translate("flower")).thenReturn("flower");
         when(translator.translate("tree")).thenReturn("tree");
@@ -124,7 +139,7 @@ public class WordCounterTests {
         // when(translator.translate("4ora")).thenReturn("4ora");
     	
     	
-        String largeText = TestDataGenerator.generateLargeTextSetWithInvalidWords(100000); // Generate a large text with 10,000 words
+        String largeText = TestDataGenerator.generateLargeTextSetWithInvalidWords(100000); // Generate a large text with 100,000 words
         wordCounter.addWord(largeText);
         
         int expectedTreeCount = countOccurrences(largeText, "tree");
@@ -134,18 +149,15 @@ public class WordCounterTests {
         assertNotEquals(actualInvalidWordCount, wordCounter.getWordCount("da33isy"));
         assertEquals(0, wordCounter.getWordCount("da33isy"));
     }
-    
-    // Adding two separate instances for brevity. In actual implementation, 
-    // since translate would function, so we can combine both
-    private int countFlowerOccurrences(String text, String word) {
-        return (int) Arrays.stream(text.split("\\W+"))
-                           .filter(w -> w.equals(word) || w.equals("flor") || w.equals("blume"))
-                           .count();
-    }
-    
-    private int countOccurrences(String text, String word) {
-        return (int) Arrays.stream(text.split("\\W+"))
-                           .filter(word::equals)
-                           .count();
-    }
+
+	// Adding two separate instances for brevity. In actual implementation,
+	// since translate would function, so we can combine both
+	private int countFlowerOccurrences(String text, String word) {
+		return (int) Arrays.stream(text.split("\\W+"))
+				.filter(w -> w.equals(word) || w.equals("flor") || w.equals("blume")).count();
+	}
+
+	private int countOccurrences(String text, String word) {
+		return (int) Arrays.stream(text.split("\\W+")).filter(word::equals).count();
+	}
 }
