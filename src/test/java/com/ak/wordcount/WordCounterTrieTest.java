@@ -80,7 +80,7 @@ public class WordCounterTrieTest {
     public void testConcurrentWordAddition() {
     	when(translator.translate("flower")).thenReturn("flower");
     	
-        String text = IntStream.range(0, 10000)
+        String text = IntStream.range(0, 600000)
                                .mapToObj(i -> "flower")
                                .collect(Collectors.joining(" "));
 
@@ -88,6 +88,6 @@ public class WordCounterTrieTest {
         IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWord(text));
 
         // Each "flower" in the text is added 10,000 times in 10 different threads
-        assertEquals(100000, wordCounter.getWordCount("flower"));
+        assertEquals(6000000, wordCounter.getWordCount("flower"));
     }
 }
