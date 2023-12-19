@@ -5,8 +5,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TrieNode {
 	
-	ConcurrentHashMap<Character, TrieNode> children;
-	AtomicInteger endOfWordCount;
+	public ConcurrentHashMap<Character, TrieNode> children;
+	public AtomicInteger endOfWordCount;
 	
 	public TrieNode() {
 		children = new ConcurrentHashMap<Character, TrieNode>();
