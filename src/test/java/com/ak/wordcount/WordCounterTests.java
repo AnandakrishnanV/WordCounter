@@ -14,12 +14,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.ak.wordcount.interfaces.IWordCounter;
 import com.ak.wordcount.interfaces.Translator;
 
 @ExtendWith(MockitoExtension.class)
 public class WordCounterTests {
 
-	private WordCounter wordCounter;
+	private IWordCounter wordCounter;
 
 	@Mock
 	private Translator translator;
@@ -50,7 +51,7 @@ public class WordCounterTests {
     public void testAddValidWord() {
 		when(translator.translate("flower")).thenReturn("flower");
 		
-        wordCounter.addWord("flower");
+        wordCounter.addWords("flower");
         assertEquals(1, wordCounter.getWordCount("flower"));
     }
 
@@ -59,7 +60,7 @@ public class WordCounterTests {
 		when(translator.translate("flower")).thenReturn("flower");
 		when(translator.translate("sunflower")).thenReturn("sunflower");
 		
-		wordCounter.addWord("flower sunflower");
+		wordCounter.addWords("flower sunflower");
         assertEquals(1, wordCounter.getWordCount("flower"));
         assertEquals(1, wordCounter.getWordCount("sunflower"));
 	}
@@ -70,7 +71,7 @@ public class WordCounterTests {
 		when(translator.translate("sunflower")).thenReturn("sunflower");
 		// when(translator.translate("flower123")).thenReturn("flower123");   -->No need to actually mock it since its going to be ignored anyway
 		
-        wordCounter.addWord("flower flower123 sunflower");
+        wordCounter.addWords("flower flower123 sunflower");
         assertEquals(1, wordCounter.getWordCount("sunflower"));
         assertEquals(1, wordCounter.getWordCount("flower"));
         // Since "flower123" is invalid, it should not be added, and its count should be 0
@@ -83,7 +84,7 @@ public class WordCounterTests {
         when(translator.translate("blume")).thenReturn("flower");
         when(translator.translate("flower")).thenReturn("flower");
 
-        wordCounter.addWord("flor blume");
+        wordCounter.addWords("flor blume");
         assertEquals(2, wordCounter.getWordCount("flower"));
     }
 
@@ -104,7 +105,7 @@ public class WordCounterTests {
 
         // Simulating concurrent access by adding the same text using multiple threads
         // Each "flower" in the text is added 10,000 times in 10 different threads
-        IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWord(text));
+        IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWords(text));
         assertEquals(100000, wordCounter.getWordCount("flower"));
     }
 
@@ -120,7 +121,7 @@ public class WordCounterTests {
 		when(translator.translate("blume")).thenReturn("flower");
 
 		String largeText = TestDataGenerator.generateLargeTextSet(100000); // Generate a large text with 100,000 words
-		wordCounter.addWord(largeText);
+		wordCounter.addWords(largeText);
 
 		int expectedFlowerCount = countFlowerOccurrences(largeText, "flower");
 		assertEquals(expectedFlowerCount, wordCounter.getWordCount("flower"));
@@ -140,7 +141,7 @@ public class WordCounterTests {
     	
     	
         String largeText = TestDataGenerator.generateLargeTextSetWithInvalidWords(100000); // Generate a large text with 100,000 words
-        wordCounter.addWord(largeText);
+        wordCounter.addWords(largeText);
         
         int expectedTreeCount = countOccurrences(largeText, "tree");
         assertEquals(expectedTreeCount, wordCounter.getWordCount("tree"));
