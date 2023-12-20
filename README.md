@@ -2,6 +2,8 @@
 
  Word frequency counter with Java8, Mockito, JUnit, Spring Boot and Maven
 
+ <h5>Note:</h5> A dummy Translator service is added to make sure the microservice functions properly. Please use the Translator interface to add the actual Translator.
+
 <h4>WordCounter</h4>
 
  * TDD: Basic intial tests created using Mockito and JUnit, Simple integration test with MockMvc
@@ -31,9 +33,12 @@
     Example Input: /api/v1/wordcounter/count?word=example
     Example Output: { "word": "text", "count": 1 }
 
+<h4>Running and Testing</h4>
 
+ * Basic implementation, so import project as an exisiting Maven Project. JUnit Tests, Run WordcountApplication to view and use the api end points
 
-
-
-
+<h4>Additional Info</h4>
  
+ * The service can be hosted on providers like AWS, GCP (Google App Enginer) for easy deployment, scaling and managemet
+ * Resiliency can be ensured through Load balancing, Redundancy (Reduce outage risks), Regular backups and implementing appropriate security measures.
+

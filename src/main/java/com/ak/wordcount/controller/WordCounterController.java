@@ -45,7 +45,7 @@ public class WordCounterController {
      * @return A ResponseEntity specifying success or failure.
      */
 	@PostMapping("/add")
-	public ResponseEntity<?> addWords(@Valid @RequestBody TextRequest request) {
+	public ResponseEntity<String> addWords(@Valid @RequestBody TextRequest request) {
 		try {
 			wordCounter.addWords(request.getText());
 			return ResponseEntity.ok("Words added successfully");
