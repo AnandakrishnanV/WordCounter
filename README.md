@@ -2,7 +2,9 @@
 
  Word frequency counter with Java8, Mockito, JUnit, Spring Boot and Maven
 
- <h4>Note:</h4> 1. A dummy Translator service is added to make sure the microservice functions properly. Please use the Translator interface to add the actual Translator.
+ <h4>Note:</h4>
+ 1. A dummy Translator service is added to make sure the microservice functions properly. Please use the Translator interface to add the actual Translator (Remove the dummy/ add @Primary to your implementation).
+ <br />
  2. Trie implementation classes left in code just for reference and potential further improvements. (Not being used currently)
 
 <h3>WordCounter</h3>
