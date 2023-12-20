@@ -105,6 +105,7 @@ public class WordCounterTests {
 
         // Simulating concurrent access by adding the same text using multiple threads
         // Each "flower" in the text is added 10,000 times in 10 different threads
+        
         IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWords(text));
         assertEquals(100000, wordCounter.getWordCount("flower"));
     }
@@ -120,7 +121,7 @@ public class WordCounterTests {
 		when(translator.translate("orchid")).thenReturn("orchid");
 		when(translator.translate("blume")).thenReturn("flower");
 
-		String largeText = TestDataGenerator.generateLargeTextSet(100000); // Generate a large text with 100,000 words
+		String largeText = TestDataGenerator.generateLargeTextSet(100000); // Generate a large text with 100,000 words with only valid words
 		wordCounter.addWords(largeText);
 
 		int expectedFlowerCount = countFlowerOccurrences(largeText, "flower");
@@ -140,7 +141,7 @@ public class WordCounterTests {
         // when(translator.translate("4ora")).thenReturn("4ora");
     	
     	
-        String largeText = TestDataGenerator.generateLargeTextSetWithInvalidWords(100000); // Generate a large text with 100,000 words
+        String largeText = TestDataGenerator.generateLargeTextSetWithInvalidWords(100000); // Generate a large text with 100,000 words with valid and invalid words
         wordCounter.addWords(largeText);
         
         int expectedTreeCount = countOccurrences(largeText, "tree");
@@ -152,7 +153,8 @@ public class WordCounterTests {
     }
 
 	// Adding two separate instances for brevity. In actual implementation,
-	// since translate would function, so we can combine both
+	// Translate would function properly, so both can be combined
+	
 	private int countFlowerOccurrences(String text, String word) {
 		return (int) Arrays.stream(text.split("\\W+"))
 				.filter(w -> w.equals(word) || w.equals("flor") || w.equals("blume")).count();
