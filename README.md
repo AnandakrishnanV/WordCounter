@@ -4,7 +4,7 @@
 
  <h5>Note:</h5> A dummy Translator service is added to make sure the microservice functions properly. Please use the Translator interface to add the actual Translator.
 
-<h4>WordCounter</h4>
+<h3>WordCounter</h3>
 
  * TDD: Basic intial tests created using Mockito and JUnit, Simple integration test with MockMvc
  * Two implementations tested initially: concurrentHashMap and Trie (with concurrentHashMap children nodes)
@@ -16,7 +16,7 @@
  * Utilized Fork/Join framework for parallel processing of word addition, in cases of large input
  * Adhered to Single Responsibility, Dependency Inversion and Interface Segregation Principles.
 
-<h4>Microservice</h4>
+<h3>Microservice</h3>
 
 * Spring Boot to develop and expose RESTful service for adding words and retrieving word counts
 * Two Endpoints
@@ -33,11 +33,11 @@
     Example Input: /api/v1/wordcounter/count?word=example
     Example Output: { "word": "text", "count": 1 }
 
-<h4>Running and Testing</h4>
+<h3>Running and Testing</h3>
 
  * Basic implementation, so import project as an exisiting Maven Project. JUnit Tests, Run WordcountApplication to view and use the api end points
 
-<h4>Additional Info</h4>
+<h3>Additional Info</h3>
  
  * The service can be hosted on providers like AWS, GCP (Google App Enginer) for easy deployment, scaling and managemet
  * Resiliency can be ensured through Load balancing, Redundancy (Reduce outage risks), Regular backups and implementing appropriate security measures.
