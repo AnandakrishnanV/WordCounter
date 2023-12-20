@@ -12,6 +12,13 @@ import com.ak.wordcount.interfaces.Translator;
 import com.ak.wordcount.util.TextProcessingUtil;
 import com.ak.wordcount.util.WordCountUtil;
 
+/**
+ * Word Counter with two functions:
+ * addWords 	takes input a String text, adds valid words to the hash map
+ * getWordCount takes single word as input, returns count if present
+ * 
+ */
+
 @Service
 public class WordCounter implements IWordCounter {
 

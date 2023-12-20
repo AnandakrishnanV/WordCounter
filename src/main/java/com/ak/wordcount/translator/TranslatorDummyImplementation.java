@@ -8,7 +8,7 @@ import com.ak.wordcount.interfaces.Translator;
 public class TranslatorDummyImplementation implements Translator{
 
 	/**
-	 * Adding default implementation to make the micro service functional
+	 * Adding default implementation to make the micro-service functional. Must be replaced with actual Translator
 	 * 
 	 * @param text The input text containing words to be counted.
 	 * @result word returns the same word back (Should be translated word in actual implementation)

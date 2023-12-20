@@ -1,19 +1,13 @@
 package com.ak.wordcount.controller;
 
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ak.wordcount.interfaces.IWordCounter;
 import com.ak.wordcount.models.FrequencyResponse;
 import com.ak.wordcount.models.TextRequest;
+
+/**
+ * REST controller for word counting operations.
+ * Provides end points for adding words to the counter and retrieving word counts.
+ */
 
 @RestController
 @RequestMapping("/api/v1/wordcounter")
@@ -38,6 +37,13 @@ public class WordCounterController {
 		this.wordCounter = wordCounter;
 	}
 
+	/**
+     * End point to add words to the counter.
+     * Accepts a JSON payload containing text to be processed.
+     *
+     * @param request The text string containing the words.
+     * @return A ResponseEntity specifying success or failure.
+     */
 	@PostMapping("/add")
 	public ResponseEntity<?> addWords(@Valid @RequestBody TextRequest request) {
 		try {
@@ -49,6 +55,13 @@ public class WordCounterController {
 		}
 	}
 
+	/**
+     * End point to retrieve the count of a specific word.
+     * The word to be counted is passed as a request parameter.
+     *
+     * @param word The word for which the count is requested.
+     * @return A ResponseEntity containing the word count or an error message.
+     */
 	@GetMapping("/count")
 	public ResponseEntity<?> getWordCount(@RequestParam @NotBlank(message = "Word cannot be blank") String word) {
 		try {
