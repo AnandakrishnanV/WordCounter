@@ -35,7 +35,7 @@
 ### 2. Get Word Count
     Endpoint: `GET /api/v1/wordcounter/count`
     Retrieves the count of a specific word that has been added to the counter. Word for which the count is required should be provided as a query parameter:
-    Example Input: /api/v1/wordcounter/count?word=example
+    Example Input: /api/v1/wordcounter/count?word=text
     Example Output: { "word": "text", "count": 1 }
 
 <h3>Running and Testing</h3>
