@@ -2,12 +2,13 @@
 
  Word frequency counter with Java8, Mockito, JUnit, Spring Boot and Maven
 
- <h5>Note:</h5> A dummy Translator service is added to make sure the microservice functions properly. Please use the Translator interface to add the actual Translator.
+ <h4>Note:</h4> 1. A dummy Translator service is added to make sure the microservice functions properly. Please use the Translator interface to add the actual Translator.
+ 2. Trie implementation classes left in code just for reference and potential further improvements. (Not being used currently)
 
 <h3>WordCounter</h3>
 
  * TDD: Basic intial tests, tests for LargeDataProcessing and concurrentWordAddition created using Mockito and JUnit, Simple integration test with MockMvc
- * Two implementations tested initially: concurrentHashMap and Trie (with concurrentHashMap children nodes)
+ * Two implementation approaches tested initially: concurrentHashMap and Trie (with concurrentHashMap children nodes)
     * Opted for concurrentHashMap as performance (tested with 600k words added) difference is minimal, 
     * Trie will have higher overhead long term (and more complex to maintain), and since we dont need prefix/auto complete as only insertion and frequency count is required, direct concurrentHashMap is best.
 
