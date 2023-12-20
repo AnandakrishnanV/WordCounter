@@ -6,7 +6,7 @@
 
 <h3>WordCounter</h3>
 
- * TDD: Basic intial tests created using Mockito and JUnit, Simple integration test with MockMvc
+ * TDD: Basic intial tests, tests for LargeDataProcessing and concurrentWordAddition created using Mockito and JUnit, Simple integration test with MockMvc
  * Two implementations tested initially: concurrentHashMap and Trie (with concurrentHashMap children nodes)
     * Opted for concurrentHashMap as performance (tested with 600k words added) difference is minimal, 
     * Trie will have higher overhead long term (and more complex to maintain), and since we dont need prefix/auto complete as only insertion and frequency count is required, direct concurrentHashMap is best.
@@ -15,10 +15,12 @@
  * AtomicInteger used for keeping count in the concurrentHashMap, ensuring atomic increments (thread-safe, prevents race conditions)
  * Utilized Fork/Join framework for parallel processing of word addition, in cases of large input
  * Adhered to Single Responsibility, Dependency Inversion and Interface Segregation Principles.
+ * Basic Logging with Logger
 
 <h3>Microservice</h3>
 
 * Spring Boot to develop and expose RESTful service for adding words and retrieving word counts
+* Basic Global Exception handling and validation with Spring Boot
 * Two Endpoints
   
 ### 1. Add Words
