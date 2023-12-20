@@ -18,12 +18,19 @@
 
 * Spring Boot to develop and expose RESTful service for adding words and retrieving word counts
 * Two Endpoints
+  
 ### 1. Add Words
-    **Endpoint:** `POST /api/v1/wordcounter/add`
+    Endpoint: `POST /api/v1/wordcounter/add`
     This endpoint allows clients to add words to the word counter. Words are processed and their occurrences are counted. Clients should send a JSON payload with the following structure:
-    { "text": "Sample text containing words to count" }
+    Example Input: { "text": "Sample text" }
+    Example Output: "Words added successfully"
 
-**Input Format:**
+### 2. Get Word Count
+    Endpoint: `GET /api/v1/wordcounter/count`
+    Retrieves the count of a specific word that has been added to the counter. Word for which the count is required should be provided as a query parameter:
+    Example Input: /api/v1/wordcounter/count?word=example
+    Example Output: { "word": "text", "count": 1 }
+
 
 
 
