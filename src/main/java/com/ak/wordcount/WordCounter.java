@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Logger;
 
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import com.ak.wordcount.interfaces.IWordCounter;
@@ -20,6 +21,7 @@ import com.ak.wordcount.util.WordCountUtil;
  */
 
 @Service
+@Primary
 public class WordCounter implements IWordCounter {
 
 	private final Translator translator;
