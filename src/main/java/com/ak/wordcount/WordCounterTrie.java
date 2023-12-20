@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
+import com.ak.wordcount.interfaces.IWordCounter;
 import com.ak.wordcount.interfaces.Translator;
 import com.ak.wordcount.models.TrieNode;
 import com.ak.wordcount.util.TextProcessingUtil;
 
-public class WordCounterTrie {
+public class WordCounterTrie implements IWordCounter {
 
 	private final Translator translator;
 	private final TrieNode root;
@@ -19,7 +20,7 @@ public class WordCounterTrie {
 		this.root = new TrieNode();
 	}
 
-	public void addWord(String text) { // Assumes input of paragraph(s) of text
+	public void addWords(String text) { // Assumes input of paragraph(s) of text
 
 		List<String> words = Arrays.asList(text.toLowerCase().split("\\W+"));
 		ForkJoinPool customPool = new ForkJoinPool(Runtime.getRuntime().availableProcessors());

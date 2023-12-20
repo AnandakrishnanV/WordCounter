@@ -32,7 +32,7 @@ public class WordCounterTrieTest {
     public void testAddValidWord() {
 		when(translator.translate("flower")).thenReturn("flower");
 		
-        wordCounter.addWord("flower");
+        wordCounter.addWords("flower");
         assertEquals(1, wordCounter.getWordCount("flower"));
     }
 	
@@ -41,7 +41,7 @@ public class WordCounterTrieTest {
 		when(translator.translate("flower")).thenReturn("flower");
 		when(translator.translate("sunflower")).thenReturn("sunflower");
 		
-		wordCounter.addWord("flower sunflower");
+		wordCounter.addWords("flower sunflower");
         assertEquals(1, wordCounter.getWordCount("flower"));
         assertEquals(1, wordCounter.getWordCount("sunflower"));
 	}
@@ -52,7 +52,7 @@ public class WordCounterTrieTest {
 		when(translator.translate("sunflower")).thenReturn("sunflower");
 		// when(translator.translate("flower123")).thenReturn("flower123");
 		
-        wordCounter.addWord("flower flower123 sunflower");
+        wordCounter.addWords("flower flower123 sunflower");
         assertEquals(1, wordCounter.getWordCount("sunflower"));
         assertEquals(1, wordCounter.getWordCount("flower"));
         // Since "flower123" is invalid, it should not be added, and its count should be 0
@@ -65,7 +65,7 @@ public class WordCounterTrieTest {
         when(translator.translate("blume")).thenReturn("flower");
         when(translator.translate("flower")).thenReturn("flower");
 
-        wordCounter.addWord("flor blume");
+        wordCounter.addWords("flor blume");
         assertEquals(2, wordCounter.getWordCount("flower"));
     }
 
@@ -85,7 +85,7 @@ public class WordCounterTrieTest {
                                .collect(Collectors.joining(" "));
 
         // Simulating concurrent access by adding the same text in multiple threads
-        IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWord(text));
+        IntStream.range(0, 10).parallel().forEach(i -> wordCounter.addWords(text));
 
         // Each "flower" in the text is added 10,000 times in 10 different threads
         assertEquals(6000000, wordCounter.getWordCount("flower"));
